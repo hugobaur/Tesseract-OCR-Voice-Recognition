@@ -9,6 +9,8 @@ import argparse
 import cv2
 import os
 
+import pyttsx3
+
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -43,12 +45,17 @@ cv2.imwrite(filename, gray)
 
 # load the image as a PIL/Pillow image, apply OCR, and then delete
 # the temporary file
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 text = pytesseract.image_to_string(Image.open(filename))
 print(str(text))
 os.remove(filename)
 
+engine = pyttsx3.init()
+engine.say(text)
+engine.runAndWait()
+engine.stop()
 
 # show the output images
-cv2.imshow("Image", image)
+# cv2.imshow("Image", image)
 cv2.imshow("Output", gray)
 cv2.waitKey(0)
